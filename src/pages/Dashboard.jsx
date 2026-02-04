@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import api from "../services/api";
+import Footer from "../components/Footer";
+
 
 function Dashboard() {
   const [totalMedicines, setTotalMedicines] = useState(0);
@@ -97,6 +99,7 @@ function Dashboard() {
           </p>
         </div>
       </div>
+      <Footer />
     </div>
   );
 }

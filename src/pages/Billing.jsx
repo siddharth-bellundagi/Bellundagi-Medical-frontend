@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import api from "../services/api";
 import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
+
 
 function Billing() {
   const [medicines, setMedicines] = useState([]);
@@ -174,6 +176,7 @@ function Billing() {
           </div>
         </div>
       </div>
+        <Footer />
     </div>
   );
 }

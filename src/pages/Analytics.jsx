@@ -1,6 +1,8 @@
 import { useState } from "react";
 import Navbar from "../components/Navbar";
 import api from "../services/api";
+import Footer from "../components/Footer";
+
 
 function Analytics() {
   const [startDate, setStartDate] = useState("");
@@ -98,6 +100,7 @@ function Analytics() {
           Detailed date-wise charts can be enabled in future versions.
         </div>
       </div>
+        <Footer />
     </div>
   );
 }
