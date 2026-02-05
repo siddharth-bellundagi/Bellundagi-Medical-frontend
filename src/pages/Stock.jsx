@@ -3,7 +3,6 @@ import api from "../services/api";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
-
 function Stock() {
   const [medicines, setMedicines] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -67,23 +66,24 @@ function Stock() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen flex flex-col bg-gray-100">
       <Navbar />
 
-      <div className="p-6 space-y-8">
-        <h1 className="text-2xl font-semibold text-slate-800">
+      {/* MAIN CONTENT */}
+      <main className="flex-grow px-4 sm:px-6 lg:px-8 py-6 space-y-8">
+        <h1 className="text-xl sm:text-2xl font-semibold text-slate-800">
           Stock Management
         </h1>
 
-        {/* Add Medicine Card */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-          <h2 className="text-lg font-semibold text-slate-800 mb-4">
+        {/* ADD MEDICINE */}
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6">
+          <h2 className="text-base sm:text-lg font-semibold text-slate-800 mb-4">
             Add Medicine
           </h2>
 
           <form
             onSubmit={handleAddMedicine}
-            className="grid grid-cols-1 md:grid-cols-3 gap-4"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4"
           >
             <input
               className="border rounded-md px-3 py-2"
@@ -92,6 +92,7 @@ function Stock() {
               onChange={(e) => setName(e.target.value)}
               required
             />
+
             <input
               className="border rounded-md px-3 py-2"
               placeholder="Company"
@@ -99,6 +100,7 @@ function Stock() {
               onChange={(e) => setCompany(e.target.value)}
               required
             />
+
             <input
               type="date"
               className="border rounded-md px-3 py-2"
@@ -106,6 +108,7 @@ function Stock() {
               onChange={(e) => setExpiryDate(e.target.value)}
               required
             />
+
             <input
               type="number"
               className="border rounded-md px-3 py-2"
@@ -114,6 +117,7 @@ function Stock() {
               onChange={(e) => setMrp(e.target.value)}
               required
             />
+
             <input
               type="number"
               className="border rounded-md px-3 py-2"
@@ -122,6 +126,7 @@ function Stock() {
               onChange={(e) => setQuantity(e.target.value)}
               required
             />
+
             <input
               type="number"
               className="border rounded-md px-3 py-2"
@@ -131,24 +136,24 @@ function Stock() {
               required
             />
 
-            <button className="md:col-span-3 bg-accent text-white py-2 rounded-md hover:bg-blue-700 transition">
+            <button className="sm:col-span-2 lg:col-span-3 bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition">
               Add Medicine
             </button>
           </form>
         </div>
 
-        {/* Stock Table Card */}
+        {/* STOCK TABLE */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-200">
-          <div className="p-5 border-b">
-            <h2 className="text-lg font-semibold text-slate-800">
+          <div className="p-4 sm:p-5 border-b">
+            <h2 className="text-base sm:text-lg font-semibold text-slate-800">
               Current Stock
             </h2>
           </div>
 
           {loading ? (
-            <p className="p-5 text-muted">Loading medicines…</p>
+            <p className="p-4 sm:p-5 text-gray-500">Loading medicines…</p>
           ) : medicines.length === 0 ? (
-            <p className="p-5 text-muted">No medicines found</p>
+            <p className="p-4 sm:p-5 text-gray-500">No medicines found</p>
           ) : (
             <div className="overflow-x-auto">
               <table className="min-w-full text-sm">
@@ -163,6 +168,7 @@ function Stock() {
                     <th className="px-4 py-3 text-right">Action</th>
                   </tr>
                 </thead>
+
                 <tbody>
                   {medicines.map((m) => {
                     const low = m.quantity <= m.minStock;
@@ -192,7 +198,7 @@ function Stock() {
                         <td className="px-4 py-3 text-right">
                           <button
                             onClick={() => handleDelete(m._id)}
-                            className="text-danger hover:underline"
+                            className="text-red-600 hover:underline"
                           >
                             Delete
                           </button>
@@ -205,7 +211,8 @@ function Stock() {
             </div>
           )}
         </div>
-      </div>
+      </main>
+
       <Footer />
     </div>
   );

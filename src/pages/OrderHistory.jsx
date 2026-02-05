@@ -3,7 +3,6 @@ import api from "../services/api";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
-
 function OrderHistory() {
   const [bills, setBills] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -39,9 +38,7 @@ function OrderHistory() {
     }
   };
 
-  const printSingleBill = () => {
-    window.print();
-  };
+  const printSingleBill = () => window.print();
 
   const printBillsByDate = () => {
     if (!printDate) {
@@ -74,41 +71,48 @@ function OrderHistory() {
   );
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen flex flex-col bg-gray-100">
       <Navbar />
 
-      <div className="p-6 space-y-6">
-        <h1 className="text-2xl font-semibold text-slate-800">
+      {/* MAIN CONTENT */}
+      <main className="flex-grow px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+        <h1 className="text-xl sm:text-2xl font-semibold text-slate-800">
           Order History
         </h1>
 
-        {/* ===== TOP ACTIONS ===== */}
-        <div className="flex flex-wrap gap-3 items-end print:hidden">
+        {/* TOP ACTIONS */}
+        <div className="flex flex-col sm:flex-row gap-3 sm:items-end print:hidden">
           <input
             type="date"
-            className="border rounded-md px-3 py-2"
+            className="border rounded-md px-3 py-2 w-full sm:w-auto"
             value={printDate}
             onChange={(e) => setPrintDate(e.target.value)}
           />
 
           <button
             onClick={printBillsByDate}
-            className="bg-accent text-white px-4 py-2 rounded-md hover:bg-blue-700 transition"
+            className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition w-full sm:w-auto"
           >
             Print Bills of Date (PDF)
           </button>
         </div>
 
-        {/* ===== BILLS TABLE ===== */}
+        {/* BILLS TABLE */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-200">
-          <div className="p-5 border-b">
-            <h2 className="text-lg font-semibold">Bills</h2>
+          <div className="p-4 sm:p-5 border-b">
+            <h2 className="text-base sm:text-lg font-semibold">
+              Bills
+            </h2>
           </div>
 
           {loading ? (
-            <p className="p-5 text-muted">Loading bills…</p>
+            <p className="p-4 sm:p-5 text-gray-500">
+              Loading bills…
+            </p>
           ) : bills.length === 0 ? (
-            <p className="p-5 text-muted">No bills found</p>
+            <p className="p-4 sm:p-5 text-gray-500">
+              No bills found
+            </p>
           ) : (
             <div className="overflow-x-auto">
               <table className="min-w-full text-sm">
@@ -147,57 +151,69 @@ function OrderHistory() {
           )}
         </div>
 
-        {/* ===== SINGLE BILL VIEW ===== */}
+        {/* SINGLE BILL VIEW */}
         {selectedBill && (
-          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 print:border-none print:shadow-none">
-            <h2 className="text-xl font-semibold text-center mb-4">
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6 print:border-none print:shadow-none">
+            <h2 className="text-lg sm:text-xl font-semibold text-center mb-4">
               BELLUNDAGI MEDICALS
             </h2>
 
-            <p><strong>Bill No:</strong> {selectedBill.billNumber}</p>
+            <p>
+              <strong>Bill No:</strong> {selectedBill.billNumber}
+            </p>
             <p>
               <strong>Date:</strong>{" "}
               {new Date(selectedBill.createdAt).toLocaleString()}
             </p>
 
-            <table className="w-full border mt-4 text-sm">
-              <thead className="bg-gray-100">
-                <tr>
-                  <th className="border px-3 py-2 text-left">Medicine</th>
-                  <th className="border px-3 py-2 text-right">Qty</th>
-                  <th className="border px-3 py-2 text-right">Amount</th>
-                </tr>
-              </thead>
-              <tbody>
-                {selectedBill.items.map((item, i) => (
-                  <tr key={i}>
-                    <td className="border px-3 py-2">{item.name}</td>
-                    <td className="border px-3 py-2 text-right">
-                      {item.quantity}
-                    </td>
-                    <td className="border px-3 py-2 text-right">
-                      ₹{item.totalPrice}
-                    </td>
+            <div className="overflow-x-auto mt-4">
+              <table className="min-w-full border text-sm">
+                <thead className="bg-gray-100">
+                  <tr>
+                    <th className="border px-3 py-2 text-left">
+                      Medicine
+                    </th>
+                    <th className="border px-3 py-2 text-right">
+                      Qty
+                    </th>
+                    <th className="border px-3 py-2 text-right">
+                      Amount
+                    </th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {selectedBill.items.map((item, i) => (
+                    <tr key={i}>
+                      <td className="border px-3 py-2">
+                        {item.name}
+                      </td>
+                      <td className="border px-3 py-2 text-right">
+                        {item.quantity}
+                      </td>
+                      <td className="border px-3 py-2 text-right">
+                        ₹{item.totalPrice}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
 
-            <p className="mt-3">
-              <strong>Total:</strong> ₹{selectedBill.totalAmount}
+            <p className="mt-3 font-semibold">
+              Total: ₹{selectedBill.totalAmount}
             </p>
 
-            <div className="mt-4 flex gap-3 print:hidden">
+            <div className="mt-4 flex flex-col sm:flex-row gap-3 print:hidden">
               <button
                 onClick={printSingleBill}
-                className="bg-accent text-white px-4 py-2 rounded-md"
+                className="bg-blue-600 text-white px-4 py-2 rounded-md"
               >
                 Print Bill
               </button>
 
               <button
                 onClick={() => deleteBill(selectedBill._id)}
-                className="border border-red-300 text-danger px-4 py-2 rounded-md"
+                className="border border-red-300 text-red-600 px-4 py-2 rounded-md"
               >
                 Delete Bill
               </button>
@@ -205,7 +221,7 @@ function OrderHistory() {
           </div>
         )}
 
-        {/* ===== DAILY PRINT MODE ===== */}
+        {/* DAILY PRINT MODE */}
         {printMode && (
           <div className="p-6">
             <h2 className="text-xl font-semibold text-center mb-6">
@@ -218,7 +234,9 @@ function OrderHistory() {
 
             {printBills.map((bill) => (
               <div key={bill._id} className="mb-6 border-b pb-4">
-                <p><strong>Bill No:</strong> {bill.billNumber}</p>
+                <p>
+                  <strong>Bill No:</strong> {bill.billNumber}
+                </p>
                 <p>
                   <strong>Date:</strong>{" "}
                   {new Date(bill.createdAt).toLocaleString()}
@@ -237,7 +255,9 @@ function OrderHistory() {
                       <tr key={i}>
                         <td>{item.name}</td>
                         <td align="right">{item.quantity}</td>
-                        <td align="right">₹{item.totalPrice}</td>
+                        <td align="right">
+                          ₹{item.totalPrice}
+                        </td>
                       </tr>
                     ))}
                   </tbody>
@@ -254,7 +274,8 @@ function OrderHistory() {
             </h3>
           </div>
         )}
-      </div>
+      </main>
+
       <Footer />
     </div>
   );

@@ -3,7 +3,6 @@ import api from "../services/api";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
-
 function Billing() {
   const [medicines, setMedicines] = useState([]);
   const [selectedItems, setSelectedItems] = useState([]);
@@ -78,105 +77,125 @@ function Billing() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen flex flex-col bg-gray-100">
       <Navbar />
 
-      <div className="p-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* LEFT: Medicines */}
-        <div className="lg:col-span-2 bg-white rounded-xl shadow-sm border border-gray-200 p-5">
-          <h2 className="text-lg font-semibold text-slate-800 mb-4">
-            Medicines
-          </h2>
+      {/* MAIN CONTENT */}
+      <main className="flex-grow px-4 sm:px-6 lg:px-8 py-6">
+        <h1 className="text-xl sm:text-2xl font-semibold text-slate-800 mb-6">
+          Billing
+        </h1>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-            {medicines.map((med) => (
-              <button
-                key={med._id}
-                onClick={() => addItem(med)}
-                className="border rounded-lg p-3 text-left hover:bg-gray-50 transition"
-              >
-                <p className="font-medium">{med.name}</p>
-                <p className="text-sm text-muted">₹{med.mrp}</p>
-              </button>
-            ))}
-          </div>
-        </div>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* LEFT: MEDICINES */}
+          <div className="lg:col-span-2 bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-5">
+            <h2 className="text-base sm:text-lg font-semibold text-slate-800 mb-4">
+              Medicines
+            </h2>
 
-        {/* RIGHT: Bill */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
-          <h2 className="text-lg font-semibold text-slate-800 mb-4">
-            Current Bill
-          </h2>
-
-          {selectedItems.length === 0 ? (
-            <p className="text-muted">No items added</p>
-          ) : (
-            <div className="space-y-3">
-              {selectedItems.map((item, index) => (
-                <div
-                  key={index}
-                  className="flex items-center justify-between border rounded-md p-2"
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+              {medicines.map((med) => (
+                <button
+                  key={med._id}
+                  onClick={() => addItem(med)}
+                  className="border rounded-lg p-3 text-left hover:bg-gray-50 transition"
                 >
-                  <div>
-                    <p className="font-medium">{item.name}</p>
-                    <p className="text-sm text-muted">₹{item.mrp}</p>
-                  </div>
-
-                  <div className="flex items-center gap-2">
-                    <input
-                      type="number"
-                      min="1"
-                      className="w-16 border rounded px-2 py-1"
-                      value={item.quantity}
-                      onChange={(e) =>
-                        updateQty(index, e.target.value)
-                      }
-                    />
-                    <button
-                      onClick={() => removeItem(index)}
-                      className="text-danger text-sm"
-                    >
-                      ✕
-                    </button>
-                  </div>
-                </div>
+                  <p className="font-medium text-sm sm:text-base">
+                    {med.name}
+                  </p>
+                  <p className="text-xs sm:text-sm text-gray-500">
+                    ₹{med.mrp}
+                  </p>
+                </button>
               ))}
             </div>
-          )}
+          </div>
 
-          {/* Totals */}
-          <div className="border-t mt-4 pt-4 space-y-2">
-            <div className="flex justify-between text-sm">
-              <span>Subtotal</span>
-              <span>₹{subtotal}</span>
+          {/* RIGHT: BILL */}
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-5">
+            <h2 className="text-base sm:text-lg font-semibold text-slate-800 mb-4">
+              Current Bill
+            </h2>
+
+            {selectedItems.length === 0 ? (
+              <p className="text-gray-500 text-sm">
+                No items added
+              </p>
+            ) : (
+              <div className="space-y-3 max-h-[300px] overflow-y-auto pr-1">
+                {selectedItems.map((item, index) => (
+                  <div
+                    key={index}
+                    className="flex items-center justify-between border rounded-md p-2"
+                  >
+                    <div>
+                      <p className="font-medium text-sm">
+                        {item.name}
+                      </p>
+                      <p className="text-xs text-gray-500">
+                        ₹{item.mrp}
+                      </p>
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="number"
+                        min="1"
+                        className="w-14 border rounded px-2 py-1 text-sm"
+                        value={item.quantity}
+                        onChange={(e) =>
+                          updateQty(index, e.target.value)
+                        }
+                      />
+                      <button
+                        onClick={() => removeItem(index)}
+                        className="text-red-600 text-sm"
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* TOTALS */}
+            <div className="border-t mt-4 pt-4 space-y-2 text-sm">
+              <div className="flex justify-between">
+                <span>Subtotal</span>
+                <span>₹{subtotal}</span>
+              </div>
+
+              <div className="flex justify-between items-center">
+                <span>Discount</span>
+                <input
+                  type="number"
+                  className="w-20 border rounded px-2 py-1 text-sm"
+                  value={discount}
+                  onChange={(e) =>
+                    setDiscount(Number(e.target.value))
+                  }
+                />
+              </div>
+
+              <div className="flex justify-between font-semibold text-base">
+                <span>Total</span>
+                <span>₹{total}</span>
+              </div>
+
+              <button
+                disabled={selectedItems.length === 0}
+                onClick={createBill}
+                className="w-full mt-3 bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition disabled:opacity-50"
+              >
+                Create Bill
+              </button>
             </div>
-
-            <div className="flex justify-between items-center text-sm">
-              <span>Discount</span>
-              <input
-                type="number"
-                className="w-24 border rounded px-2 py-1"
-                value={discount}
-                onChange={(e) => setDiscount(Number(e.target.value))}
-              />
-            </div>
-
-            <div className="flex justify-between font-semibold text-lg">
-              <span>Total</span>
-              <span>₹{total}</span>
-            </div>
-
-            <button
-              disabled={selectedItems.length === 0}
-              onClick={createBill}
-              className="w-full mt-3 bg-accent text-white py-2 rounded-md hover:bg-blue-700 transition disabled:opacity-50"
-            >
-              Create Bill
-            </button>
           </div>
         </div>
-      </div>
-        <Footer />
+      </main>
+
+      <Footer />
     </div>
   );
 }
